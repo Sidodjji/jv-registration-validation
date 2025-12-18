@@ -7,15 +7,17 @@ import core.basesyntax.model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RegistrationServiceImplTest {
 
-    static private User userOk = new User();
-    static private User userNotOk = new User();
-    static private RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
-    static private StorageDao storageDao = new StorageDaoImpl();
-    static private User registeredUser = new User();
+    private static User userOk = new User();
+    private static User userNotOk = new User();
+    private static RegistrationServiceImpl registrationService =
+            new RegistrationServiceImpl();
+    private static StorageDao storageDao = new StorageDaoImpl();
+    private static User registeredUser = new User();
 
     @BeforeAll
     static void beforeAll() {
@@ -44,15 +46,13 @@ class RegistrationServiceImplTest {
 
     @Test
     void registerUser_NotOk() {
-        assertThrows(InvalidInputException.class, () -> {
-            registrationService.register(userNotOk);
-        });
+        assertThrows(InvalidInputException.class,
+                () -> registrationService.register(userNotOk));
     }
 
     @Test
     void registeredUserNotOk() {
-        assertThrows(InvalidInputException.class, () -> {
-            registrationService.register(registeredUser);
-        });
+        assertThrows(InvalidInputException.class,
+                () -> registrationService.register(registeredUser));
     }
 }
