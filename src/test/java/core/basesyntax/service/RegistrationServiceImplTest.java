@@ -4,35 +4,40 @@ import core.basesyntax.dao.StorageDao;
 import core.basesyntax.dao.StorageDaoImpl;
 import core.basesyntax.exeption.InvalidInputException;
 import core.basesyntax.model.User;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RegistrationServiceImplTest {
 
-    private User userOk = new User();
-    private User userNotOk = new User();
-    private RegistrationServiceImpl registrationService =
-            new RegistrationServiceImpl();
-    private StorageDao storageDao = new StorageDaoImpl();
-    private User registeredUser = new User();
-    private User nullUser = new User();
+    private User userOk;
+    private User userNotOk;
+    private User registeredUser;
+    private RegistrationServiceImpl registrationService;
+    private StorageDao storageDao;
 
     @BeforeEach
     void setUp() {
-        userOk.setPassword("Password");
+        registrationService = new RegistrationServiceImpl();
+        storageDao = new StorageDaoImpl();
+
+        userOk = new User();
         userOk.setLogin("Loggin");
+        userOk.setPassword("Password");
         userOk.setAge(18);
 
-        userNotOk.setPassword("Pword");
+        userNotOk = new User();
         userNotOk.setLogin("Lgin");
+        userNotOk.setPassword("Pword");
         userNotOk.setAge(14);
 
-        registeredUser.setPassword(null);
+        registeredUser = new User();
         registeredUser.setLogin("Logginn");
+        registeredUser.setPassword("Password");
         registeredUser.setAge(18);
+
         storageDao.add(registeredUser);
     }
 
@@ -40,7 +45,6 @@ class RegistrationServiceImplTest {
     void register_validUser_ok() {
         registrationService.register(userOk);
         assertEquals(userOk, storageDao.get(userOk.getLogin()));
-
     }
 
     @Test
@@ -56,20 +60,8 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void registerUser_withNullPassword_NotOk() {
+    void register_nullUser_notOk() {
         assertThrows(InvalidInputException.class,
-                () -> registrationService.register(nullUser));
-    }
-
-    @Test
-    void registerUser_withNullLogin_NotOk() {
-        assertThrows(InvalidInputException.class,
-                () -> registrationService.register(nullUser));
-    }
-
-    @Test
-    void registerUser_withNullAge_NotOk() {
-        assertThrows(InvalidInputException.class,
-                () -> registrationService.register(nullUser));
+                () -> registrationService.register(null));
     }
 }

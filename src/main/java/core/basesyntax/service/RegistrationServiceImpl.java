@@ -6,18 +6,22 @@ import core.basesyntax.exeption.InvalidInputException;
 import core.basesyntax.model.User;
 
 public class RegistrationServiceImpl implements RegistrationService {
-    private final int MIN_LOGIN_LENGTH = 6;
-    private final int MIN_PASSWORD_LENGTH = 6;
-    private final int MIN_AGE = 18;
+    private static final int minLoginLength = 6;
+    private static final int minPasswordLength = 6;
+    private static final int minAge = 18;
     private final StorageDao storageDao = new StorageDaoImpl();
 
     @Override
     public User register(User user) {
+        if (user == null) {
+            throw new InvalidInputException("User can't be null");
+        }
+
         if (storageDao.get(user.getLogin()) != null) {
             throw new InvalidInputException("User already created");
         }
         try {
-            if (user.getLogin().length() < MIN_LOGIN_LENGTH
+            if (user.getLogin().length() < minLoginLength
                     || user.getLogin() == null) {
                 throw new InvalidInputException("login must have 6 letters");
             }
@@ -25,7 +29,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new InvalidInputException("Login can't be null", e);
         }
         try {
-            if (user.getPassword().length() < MIN_PASSWORD_LENGTH
+            if (user.getPassword().length() < minPasswordLength
                     || user.getPassword() == null) {
                 throw new InvalidInputException("Password must have 6 letters");
             }
@@ -33,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new InvalidInputException("Password can't be null", e);
         }
         try {
-            if (user.getAge() < MIN_AGE
+            if (user.getAge() < minAge
                     || user.getAge() == null) {
                 throw new InvalidInputException("Age must be 18 or older");
             }
