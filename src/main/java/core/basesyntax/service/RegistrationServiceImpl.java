@@ -8,7 +8,6 @@ import core.basesyntax.model.User;
 public class RegistrationServiceImpl implements RegistrationService {
     private final StorageDao storageDao = new StorageDaoImpl();
 
-
     @Override
     public User register(User user) {
         if (storageDao.get(user.getLogin()) != null) {

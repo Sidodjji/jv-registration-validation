@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RegistrationServiceImplTest {
 
-    static User userOk = new User();
-    static User userNotOk = new User();
-    RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
-    static StorageDao storageDao = new StorageDaoImpl();
-    static User registeredUser = new User();
+    static private User userOk = new User();
+    static private User userNotOk = new User();
+    static private RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
+    static private StorageDao storageDao = new StorageDaoImpl();
+    static private User registeredUser = new User();
 
     @BeforeAll
     static void beforeAll() {
