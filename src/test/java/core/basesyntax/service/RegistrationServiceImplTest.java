@@ -5,54 +5,71 @@ import core.basesyntax.dao.StorageDaoImpl;
 import core.basesyntax.exeption.InvalidInputException;
 import core.basesyntax.model.User;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RegistrationServiceImplTest {
 
-    private static User userOk = new User();
-    private static User userNotOk = new User();
-    private static RegistrationServiceImpl registrationService =
+    private User userOk = new User();
+    private User userNotOk = new User();
+    private RegistrationServiceImpl registrationService =
             new RegistrationServiceImpl();
-    private static StorageDao storageDao = new StorageDaoImpl();
-    private static User registeredUser = new User();
+    private StorageDao storageDao = new StorageDaoImpl();
+    private User registeredUser = new User();
+    private User nullUser = new User();
 
-    @BeforeAll
-    static void beforeAll() {
-        userOk.setId(1L);
+    @BeforeEach
+    void setUp() {
         userOk.setPassword("Password");
         userOk.setLogin("Loggin");
         userOk.setAge(18);
 
-        userNotOk.setId(1L);
         userNotOk.setPassword("Pword");
         userNotOk.setLogin("Lgin");
         userNotOk.setAge(14);
 
-        registeredUser.setId(1L);
-        registeredUser.setPassword("Password");
+        registeredUser.setPassword(null);
         registeredUser.setLogin("Logginn");
         registeredUser.setAge(18);
-
         storageDao.add(registeredUser);
     }
 
     @Test
-    void registerUser_Ok() {
-        assertNotNull(registrationService.register(userOk));
+    void register_validUser_ok() {
+        registrationService.register(userOk);
+        assertEquals(userOk, storageDao.get(userOk.getLogin()));
+
     }
 
     @Test
-    void registerUser_NotOk() {
+    void register_userWithInvalidData_notOk() {
         assertThrows(InvalidInputException.class,
                 () -> registrationService.register(userNotOk));
     }
 
     @Test
-    void registeredUserNotOk() {
+    void register_existingUser_notOk() {
         assertThrows(InvalidInputException.class,
                 () -> registrationService.register(registeredUser));
+    }
+
+    @Test
+    void registerUser_withNullPassword_NotOk() {
+        assertThrows(InvalidInputException.class,
+                () -> registrationService.register(nullUser));
+    }
+
+    @Test
+    void registerUser_withNullLogin_NotOk() {
+        assertThrows(InvalidInputException.class,
+                () -> registrationService.register(nullUser));
+    }
+
+    @Test
+    void registerUser_withNullAge_NotOk() {
+        assertThrows(InvalidInputException.class,
+                () -> registrationService.register(nullUser));
     }
 }

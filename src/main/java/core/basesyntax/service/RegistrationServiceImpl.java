@@ -6,6 +6,9 @@ import core.basesyntax.exeption.InvalidInputException;
 import core.basesyntax.model.User;
 
 public class RegistrationServiceImpl implements RegistrationService {
+    private final int MIN_LOGIN_LENGTH = 6;
+    private final int MIN_PASSWORD_LENGTH = 6;
+    private final int MIN_AGE = 18;
     private final StorageDao storageDao = new StorageDaoImpl();
 
     @Override
@@ -13,15 +16,30 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (storageDao.get(user.getLogin()) != null) {
             throw new InvalidInputException("User already created");
         }
-        if (user.getLogin().length() < 6) {
-            throw new InvalidInputException("login must have 6 letters");
+        try {
+            if (user.getLogin().length() < MIN_LOGIN_LENGTH
+                    || user.getLogin() == null) {
+                throw new InvalidInputException("login must have 6 letters");
+            }
+        } catch (NullPointerException e) {
+            throw new InvalidInputException("Login can't be null", e);
         }
-        if (user.getPassword().length() < 6) {
-            throw new InvalidInputException("Password must have 6 letters");
+        try {
+            if (user.getPassword().length() < MIN_PASSWORD_LENGTH
+                    || user.getPassword() == null) {
+                throw new InvalidInputException("Password must have 6 letters");
+            }
+        } catch (NullPointerException e) {
+            throw new InvalidInputException("Password can't be null", e);
         }
-        if (user.getAge() < 18) {
-            throw new InvalidInputException("Age must be 18 or older");
+        try {
+            if (user.getAge() < MIN_AGE
+                    || user.getAge() == null) {
+                throw new InvalidInputException("Age must be 18 or older");
+            }
+        } catch (NullPointerException e) {
+            throw new InvalidInputException("Age can't be null", e);
         }
-        return user;
+        return storageDao.add(user);
     }
 }
