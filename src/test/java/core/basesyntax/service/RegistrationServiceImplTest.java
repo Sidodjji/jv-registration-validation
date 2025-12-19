@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RegistrationServiceImplTest {
-
     private User userOk;
     private User registeredUser;
     private User userPasswordNotOK;
@@ -98,7 +97,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void  register_userPassword_NotOK() {
+    void register_userPassword_NotOK() {
         assertThrows(InvalidInputException.class,
                 () -> registrationService.register(userPasswordNotOK));
     }

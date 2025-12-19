@@ -18,18 +18,23 @@ public class RegistrationServiceImpl implements RegistrationService {
                 || user.getLogin() == null) {
             throw new InvalidInputException("User object or fields can't be null");
         }
+
         if (storageDao.get(user.getLogin()) != null) {
             throw new InvalidInputException("User already created");
         }
+
         if (user.getLogin().length() < minLoginLength) {
-                throw new InvalidInputException("login must have 6 letters");
+            throw new InvalidInputException("login must have 6 letters");
         }
+
         if (user.getPassword().length() < minPasswordLength) {
-                throw new InvalidInputException("Password must have 6 letters");
+            throw new InvalidInputException("Password must have 6 letters");
         }
+
         if (user.getAge() < minAge) {
-                throw new InvalidInputException("Age must be 18 or older");
+            throw new InvalidInputException("Age must be 18 or older");
         }
+
         return storageDao.add(user);
     }
 }
