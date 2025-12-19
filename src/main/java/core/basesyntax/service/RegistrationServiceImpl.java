@@ -13,36 +13,22 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public User register(User user) {
-        if (user == null) {
-            throw new InvalidInputException("User can't be null");
+        if (user == null || user.getAge() == null
+                || user.getPassword() == null
+                || user.getLogin() == null) {
+            throw new InvalidInputException("User object or fields can't be null");
         }
-
         if (storageDao.get(user.getLogin()) != null) {
             throw new InvalidInputException("User already created");
         }
-        try {
-            if (user.getLogin().length() < minLoginLength
-                    || user.getLogin() == null) {
+        if (user.getLogin().length() < minLoginLength) {
                 throw new InvalidInputException("login must have 6 letters");
-            }
-        } catch (NullPointerException e) {
-            throw new InvalidInputException("Login can't be null", e);
         }
-        try {
-            if (user.getPassword().length() < minPasswordLength
-                    || user.getPassword() == null) {
+        if (user.getPassword().length() < minPasswordLength) {
                 throw new InvalidInputException("Password must have 6 letters");
-            }
-        } catch (NullPointerException e) {
-            throw new InvalidInputException("Password can't be null", e);
         }
-        try {
-            if (user.getAge() < minAge
-                    || user.getAge() == null) {
+        if (user.getAge() < minAge) {
                 throw new InvalidInputException("Age must be 18 or older");
-            }
-        } catch (NullPointerException e) {
-            throw new InvalidInputException("Age can't be null", e);
         }
         return storageDao.add(user);
     }
